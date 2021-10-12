@@ -1,0 +1,11 @@
+nav ul{
+  display:flex;
+  list-style-type:none;
+}
+nav ul > li {
+  margin: 0 .5em;
+}
+
+nav ul > li.active a{
+  color: #ffaa00;
+}
