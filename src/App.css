@@ -11,7 +11,7 @@
 }
 
 .App-logo {
-  height: 40vmin;
+  height: 20vmin;
   pointer-events: none;
   animation: App-logo-spin infinite 20s linear;
 }
@@ -28,7 +28,6 @@ a {
     transform: rotate(360deg);
   }
 }
-
 button {
   font-size: calc(10px + 2vmin);
   background: #61dafb;
@@ -47,7 +46,3 @@ button:active {
   background: black;
 }
 
-.error {
-  color: #ff8888;
-  margin: 1em;
-}

@@ -1,9 +1,10 @@
 nav ul{
   display:flex;
   list-style-type:none;
+  padding: 0;
 }
-nav ul > li {
-  margin: 0 .5em;
+nav ul > li:not(:first-child) {
+  margin-left: 1em;
 }
 
 nav ul > li.active a{
