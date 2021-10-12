@@ -272,10 +272,10 @@
   resolved "https://registry.yarnpkg.com/@types/js-cookie/-/js-cookie-2.2.7.tgz#226a9e31680835a6188e887f3988e60c04d3f6a3"
   integrity sha512-aLkWa0C0vO5b4Sr798E26QgOkss68Un0bLjs7u9qxzPT5CG+8DuNTffWES58YzJs3hrVAOs1wonycqEBqNJubA==
 
-"@uc/compass-app-bridge@^0.1.0-beta.68186.1":
-  version "0.1.0-beta.68186.1"
-  resolved "https://urbancompass.jfrog.io/urbancompass/api/npm/npm/@uc/compass-app-bridge/-/@uc/compass-app-bridge-0.1.0-beta.68186.1.tgz#27a7f4bcd79c68141672251a8de7f47fa4bfe8b8"
-  integrity sha1-J6f0vNecaBQWciUajef0f6S/6Lg=
+"@uc/compass-app-bridge@0.1.0-beta.68186.6":
+  version "0.1.0-beta.68186.6"
+  resolved "https://urbancompass.jfrog.io/urbancompass/api/npm/npm/@uc/compass-app-bridge/-/@uc/compass-app-bridge-0.1.0-beta.68186.6.tgz#c27eec76f409fb2b5097a11e427e424b3671a74c"
+  integrity sha1-wn7sdvQJ+ytQl6EeQn5CSzZxp0w=
 
 "@vitejs/plugin-react@^1.0.0":
   version "1.0.2"

@@ -1,19 +1,27 @@
-import { useEffect, useState, useRef } from "react";
 import { useAsync } from "react-use";
 import { EmbeddedApp } from "@uc/compass-app-bridge";
 import logo from "./logo.svg";
 import "./App.css";
+import { useEffect } from "react";
 
 function App() {
   const { value: bridge, loading, error } = useAsync(initCAB, []);
+
+  useEffect(() => {
+    () => bridge.destroy();
+  }, []);
 
   if (error) {
     console.error("embedded failed", error);
   }
 
-  function onSend() {
-    console.log("send action to bridge");
-    bridge.dispatch("ERROR", "a demo error message");
+  async function onSend() {
+    console.groupCollapsed(
+      "Sending an action from embedded",
+      new Date().toLocaleTimeString()
+    );
+    await bridge.dispatch({ type: "ERROR", payload: "a demo error message" });
+    console.groupEnd();
   }
 
   return (
@@ -34,22 +42,27 @@ function App() {
 export default App;
 
 async function initCAB() {
-  const bridge = await EmbeddedApp.create({
-    origin: "http://webapp.localhost/",
+  console.groupCollapsed(
+    "Demo embedded initialization",
+    new Date().toLocaleTimeString()
+  );
+  const bridge = EmbeddedApp.create({
+    origin: "http://webapp.localhost",
     serviceId: "digital-ads",
-    logger: {
-      messageSent: (message) => {
-        console.log("embedded message sent", message);
-      },
-      messageReceived: (message) => {
-        console.log("embedded message received", message);
-      },
-    },
+    // In this demo, autoResize is disabled, for the parent container
+    // manages the height.
+    autoResize: false,
+    debug: true,
   });
-  console.log("bridge created", bridge);
-  // FIXME: isReady is in the latest code but hasn't been included yet in the published package
-  // if (bridge.isReady) {
-  //   await bridge.isReady();
-  // }
-  return bridge;
+  console.log("embedded bridge created", bridge);
+  try {
+    await bridge.isReady();
+    console.log("embedded bridge is ready", bridge);
+    return bridge;
+  } catch (e) {
+    console.error("embedded bridge cannot be ready", e);
+    throw e;
+  } finally {
+    console.groupEnd();
+  }
 }
