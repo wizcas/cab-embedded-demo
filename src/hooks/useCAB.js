@@ -1,8 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useCallback } from "react";
 import { useAsync } from "react-use";
 import { EmbeddedApp } from "@uc/compass-app-bridge";
 
-export function useCAB(config) {
+export function useCAB(config, tokenHandler) {
   const { value, loading, error } = useAsync(initCAB, []);
   const bridgeRef = useRef(value);
   bridgeRef.current = value;
@@ -16,17 +16,27 @@ export function useCAB(config) {
       );
 
       const bridge = EmbeddedApp.create(config);
-      console.log("embedded bridge created", bridge);
       await bridge.isReady();
       console.log("embedded bridge is ready", bridge);
+      bridge.subscribe("AUTHENTICATE", onReceiveToken);
+      const token = await bridge.dispatch({ type: "AUTHENTICATE" });
+      onReceiveToken(token);
+      console.groupEnd();
       return bridge;
     } catch (e) {
+      console.groupEnd();
       console.error("embedded bridge cannot be ready", e);
       throw e;
-    } finally {
-      console.groupEnd();
     }
   }
+
+  const onReceiveToken = useCallback(
+    (token) => {
+      console.log("embedded app has received a token", token);
+      tokenHandler?.(token);
+    },
+    [tokenHandler]
+  );
 
   useEffect(() => {
     () => {
@@ -39,3 +49,5 @@ export function useCAB(config) {
     error,
   };
 }
+
+function subscribeToCabActions(bridge) {}

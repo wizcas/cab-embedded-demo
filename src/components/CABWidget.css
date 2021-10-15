@@ -1,6 +1,11 @@
 .cab {
   background: rgba(0,0,0,0.15);
   font-size: calc(10px + 1vmin);
+  display: flex;
+  flex-direction: column;
+}
+.cab *:not(:last-child){
+  margin-bottom: 10px;
 }
 .cab button {
   font-size: unset;
@@ -9,4 +14,12 @@
 .cab .error {
   color: #ff8888;
   margin: 1em;
+}
+
+.cab table td.label {
+  font-weight: bold;
+  text-align: left;
+}
+.cab table td.value{
+  font-family: monospace;
 }
