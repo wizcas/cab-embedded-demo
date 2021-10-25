@@ -20,6 +20,7 @@ export function useCAB(config, tokenHandler) {
       console.log("embedded bridge is ready", bridge);
       bridge.subscribe("AUTHENTICATE", onReceiveToken);
       const token = await bridge.dispatch({ type: "AUTHENTICATE" });
+      console.log({ token });
       onReceiveToken(token);
       console.groupEnd();
       return bridge;
@@ -49,5 +50,3 @@ export function useCAB(config, tokenHandler) {
     error,
   };
 }
-
-function subscribeToCabActions(bridge) {}
