@@ -13,8 +13,8 @@ export function CABWidget() {
       serviceId: "digital-ads",
       // In this demo, autoResize is disabled, for the parent container
       // manages the height.
-      autoResize: false,
-      debug: true,
+      // autoResize: false,
+      // debug: true,
     },
     (token) => {
       setToken(token);
@@ -26,27 +26,40 @@ export function CABWidget() {
     console.error("embedded failed", error);
   }
 
-  async function onSend() {
-    console.groupCollapsed(
-      "Sending an action from embedded",
-      new Date().toLocaleTimeString()
-    );
+  async function onGotoProfile(inNewTab) {
     await bridge.dispatch({
-      type: "ERROR",
-      payload: JSON.stringify({
-        target: "pipelines.redirection-demo",
+      type: "NAVIGATE",
+      payload: {
+        page: "/account/profile",
+        target: inNewTab ? "blank" : undefined,
         context: {
-          url: window.location.href,
+          backUrl: window.location.href,
         },
-      }),
+      },
     });
-    console.groupEnd();
+  }
+
+  async function onGotoFlow() {
+    await bridge.dispatch({
+      type: "NAVIGATE",
+      payload: {
+        // If you want to open DA in the page with sidebar, set frame to 'main'
+        frame: "flow",
+        // Here goes the absolute URL of the target DA page
+        url: "http://localhost:3001/page2",
+        context: {
+          backUrl: window.location.href,
+        },
+      },
+    });
   }
 
   async function onGetToken() {
-    await bridge.dispatch({
-      type: "AUTHENTICATE",
-    });
+    setToken(
+      await bridge.dispatch({
+        type: "AUTHENTICATE",
+      })
+    );
     setGetTokenTime(Date.now());
   }
 
@@ -56,7 +69,13 @@ export function CABWidget() {
         <div className="loading">Loading CAB...</div>
       ) : (
         <>
-          <button onClick={onSend}>Redirect in parent</button>
+          <button onClick={() => onGotoProfile(false)}>
+            Profile in current tab
+          </button>
+          <button onClick={() => onGotoProfile(true)}>
+            Profile in new tab
+          </button>
+          <button onClick={onGotoFlow}>To ads flow</button>
           <button onClick={onGetToken}>Get Token</button>
           <table>
             <tbody>

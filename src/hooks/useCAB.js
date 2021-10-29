@@ -8,7 +8,7 @@ export function useCAB(config, tokenHandler) {
   bridgeRef.current = value;
 
   async function initCAB() {
-    if (bridgeRef.current) return;
+    if (bridgeRef.current) return bridgeRef.current;
     try {
       console.group(
         "Demo embedded initialization",
