@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useCAB } from "../hooks/useCAB";
 import "./CABWidget.css";
 
-export function CABWidget() {
+export function CABWidget({ simple }) {
   const [token, setToken] = useState();
   const [getTokenTime, setGetTokenTime] = useState(Date.now());
   const { bridge, loading, error } = useCAB(
@@ -63,44 +63,42 @@ export function CABWidget() {
     setGetTokenTime(Date.now());
   }
 
+  const content = simple ? (
+    <span>CAB Loaded</span>
+  ) : (
+    <>
+      <button onClick={() => onGotoProfile(false)}>
+        Profile in current tab
+      </button>
+      <button onClick={() => onGotoProfile(true)}>Profile in new tab</button>
+      <button onClick={onGotoFlow}>To ads flow</button>
+      <button onClick={onGetToken}>Get Token</button>
+      <table>
+        <tbody>
+          <tr>
+            <td className="label">Token</td>
+            <td className="value">{token?.value || "N/A"}</td>
+          </tr>
+          <tr>
+            <td className="label">Expire At</td>
+            <td className="value">
+              {token ? new Date(token.expireAt).toLocaleTimeString() : "N/A"}
+            </td>
+          </tr>
+          <tr>
+            <td className="label">Retrieved At</td>
+            <td className="value">
+              {new Date(getTokenTime).toLocaleTimeString()}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </>
+  );
+
   return (
     <div className="cab">
-      {loading ? (
-        <div className="loading">Loading CAB...</div>
-      ) : (
-        <>
-          <button onClick={() => onGotoProfile(false)}>
-            Profile in current tab
-          </button>
-          <button onClick={() => onGotoProfile(true)}>
-            Profile in new tab
-          </button>
-          <button onClick={onGotoFlow}>To ads flow</button>
-          <button onClick={onGetToken}>Get Token</button>
-          <table>
-            <tbody>
-              <tr>
-                <td className="label">Token</td>
-                <td className="value">{token?.value || "N/A"}</td>
-              </tr>
-              <tr>
-                <td className="label">Expire At</td>
-                <td className="value">
-                  {token
-                    ? new Date(token.expireAt).toLocaleTimeString()
-                    : "N/A"}
-                </td>
-              </tr>
-              <tr>
-                <td className="label">Retrieved At</td>
-                <td className="value">
-                  {new Date(getTokenTime).toLocaleTimeString()}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </>
-      )}
+      {loading ? <div className="loading">Loading CAB...</div> : content}
       {error ? <div className="error">Error: {error.message}</div> : null}
     </div>
   );
