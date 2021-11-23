@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { useEffect } from "react/cjs/react.development";
 import { useCAB } from "../hooks/useCAB";
 import "./CABWidget.css";
 
@@ -22,46 +23,74 @@ export function CABWidget({ simple }) {
     }
   );
 
+  function checkCab() {
+    if (!bridge) {
+      console.error("CAB is not ready");
+    }
+    return !!bridge;
+  }
+
   if (error) {
     console.error("embedded failed", error);
   }
 
   async function onGotoProfile(inNewTab) {
-    await bridge.dispatch({
-      type: "NAVIGATE",
-      payload: {
-        page: "/account/profile",
-        target: inNewTab ? "blank" : undefined,
-        context: {
-          backUrl: window.location.href,
+    if (checkCab()) {
+      await bridge.dispatch({
+        type: "NAVIGATE",
+        payload: {
+          page: "/account/profile",
+          target: inNewTab ? "blank" : undefined,
+          context: {
+            backUrl: window.location.href,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   async function onGotoFlow() {
-    await bridge.dispatch({
-      type: "NAVIGATE",
-      payload: {
-        // If you want to open DA in the page with sidebar, set frame to 'main'
-        frame: "flow",
-        // Here goes the absolute URL of the target DA page
-        url: "http://localhost:3001/page2",
-        context: {
-          backUrl: window.location.href,
+    if (checkCab()) {
+      await bridge.dispatch({
+        type: "NAVIGATE",
+        payload: {
+          // If you want to open DA in the page with sidebar, set frame to 'main'
+          frame: "flow",
+          // Here goes the absolute URL of the target DA page
+          url: "http://localhost:3001/page2",
+          context: {
+            backUrl: window.location.href,
+          },
         },
-      },
-    });
+      });
+    }
   }
 
   async function onGetToken() {
-    setToken(
-      await bridge.dispatch({
-        type: "AUTHENTICATE",
-      })
-    );
-    setGetTokenTime(Date.now());
+    if (checkCab()) {
+      setToken(
+        await bridge.dispatch({
+          type: "AUTHENTICATE",
+        })
+      );
+      setGetTokenTime(Date.now());
+    }
   }
+
+  // Mock the time span of data loading to determine whether the embedded app
+  // should be shown. It depends on the parent app to decide whether to watch
+  // the readiness.
+  // In our case, only the ad stats card will listen to the CONTENT_READY action,
+  // and will be not be rendered before the data's ready.
+  useEffect(() => {
+    if (bridge && !error) {
+      setTimeout(() => {
+        bridge.dispatch({
+          type: "CONTENT_READY",
+        });
+      }, 1000);
+    }
+  }, [bridge, error]);
 
   const content = simple ? (
     <span>CAB Loaded</span>
