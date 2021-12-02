@@ -54,6 +54,19 @@ export function CABWidget() {
     });
   }
 
+  async function onCreateTransaction() {
+    await bridge.dispatch({
+      type: "NAVIGATE",
+      payload: {
+        street: 'demo test Street',
+        city: 'Los Angeles',
+        unit: '1',
+        state: 'CA',
+        zipCode: '90012',
+      },
+    });
+  }
+
   async function onGetToken() {
     setToken(
       await bridge.dispatch({
@@ -74,6 +87,9 @@ export function CABWidget() {
           </button>
           <button onClick={() => onGotoProfile(true)}>
             Profile in new tab
+          </button>
+          <button onClick={onCreateTransaction}>
+            Create new transaction
           </button>
           <button onClick={onGotoFlow}>To ads flow</button>
           <button onClick={onGetToken}>Get Token</button>
