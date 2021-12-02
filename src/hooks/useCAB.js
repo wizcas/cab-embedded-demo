@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
 import { useAsync } from "react-use";
-import { EmbeddedApp } from "@uc/compass-app-bridge";
+import "../cab";
 
 export function useCAB(config, tokenHandler) {
   const { value, loading, error } = useAsync(initCAB, []);
