@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react/cjs/react.development";
 import { useCAB } from "../hooks/useCAB";
 import "./CABWidget.css";
