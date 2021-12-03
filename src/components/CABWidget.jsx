@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { useCAB } from "../hooks/useCAB";
 import "./CABWidget.css";
 
+const origins = {
+  beta: "https://app.dev.glide.com",
+  dev: "http://webapp.localhost",
+};
+
 export function CABWidget({ simple }) {
   const [token, setToken] = useState();
   const [getTokenTime, setGetTokenTime] = useState(Date.now());
@@ -9,7 +14,7 @@ export function CABWidget({ simple }) {
     {
       // Note that the origin must not be trailing with a slash
       // Otherwise it won't match the responses from the parent
-      origin: process.env.ORIGIN || "http://webapp.localhost",
+      origin: import.meta.env.DEV ? origins.dev : origins.beta,
       serviceId: "digital-ads",
       // In this demo, autoResize is disabled, for the parent container
       // manages the height.
