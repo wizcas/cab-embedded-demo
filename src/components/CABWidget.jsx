@@ -9,11 +9,11 @@ export function CABWidget({ simple }) {
     {
       // Note that the origin must not be trailing with a slash
       // Otherwise it won't match the responses from the parent
-      origin: "http://webapp.localhost",
+      origin: process.env.ORIGIN || "http://webapp.localhost",
       serviceId: "digital-ads",
       // In this demo, autoResize is disabled, for the parent container
       // manages the height.
-      // autoResize: false,
+      autoResize: false,
       // debug: true,
     },
     (token) => {
