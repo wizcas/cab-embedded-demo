@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
 import { useAsync } from "react-use";
-import "../cab";
+import { EmbeddedApp } from "../cab";
 
 export function useCAB(config, tokenHandler) {
   const { value, loading, error } = useAsync(initCAB, []);

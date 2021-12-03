@@ -8,13 +8,15 @@ const origins = {
 };
 
 export function CABWidget({ simple }) {
+  const origin = import.meta.env.DEV ? origins.dev : origins.beta;
+  console.log({ origin });
   const [token, setToken] = useState();
   const [getTokenTime, setGetTokenTime] = useState(Date.now());
   const { bridge, loading, error } = useCAB(
     {
       // Note that the origin must not be trailing with a slash
       // Otherwise it won't match the responses from the parent
-      origin: import.meta.env.DEV ? origins.dev : origins.beta,
+      origin,
       serviceId: "digital-ads",
       // In this demo, autoResize is disabled, for the parent container
       // manages the height.
