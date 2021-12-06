@@ -85,6 +85,17 @@ export function CABWidget({ simple }) {
     });
   }
 
+  async function onGetFlag() {
+    const flag = await bridge.dispatch({
+      type: "GET_RESOURCE",
+      payload: {
+        // flag: "glide-da-stripe-alt-key",
+        flag: "glide-da",
+      },
+    });
+    console.log({ flag });
+  }
+
   async function onGetToken() {
     if (checkCab()) {
       setToken(
@@ -121,6 +132,7 @@ export function CABWidget({ simple }) {
       <button onClick={() => onGotoProfile(true)}>Profile in new tab</button>
 
       <button onClick={onCreateTransaction}>Create new transaction</button>
+      <button onClick={onGetFlag}>Get Flag</button>
       <button onClick={onGotoFlow}>To ads flow</button>
       <button onClick={onGetToken}>Get Token</button>
       <table>
