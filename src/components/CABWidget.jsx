@@ -89,8 +89,8 @@ export function CABWidget({ simple }) {
     const flag = await bridge.dispatch({
       type: "GET_RESOURCE",
       payload: {
-        // flag: "glide-da-stripe-alt-key",
-        flag: "glide-da",
+        flag: "glide-da.stripe-alt-key",
+        // flag: "glide-da",
       },
     });
     console.log({ flag });
