@@ -86,14 +86,35 @@ export function CABWidget({ simple }) {
   }
 
   async function onGetFlag() {
-    const flag = await bridge.dispatch({
+    const flags = await bridge.dispatch({
       type: "GET_RESOURCE",
       payload: {
-        flag: "glide-da.stripe-alt-key",
-        // flag: "glide-da",
+        flags: [
+          "glide-da.stripe-alt-key",
+          "glide-da",
+          "transactions.search-api-migration",
+        ],
       },
     });
-    console.log({ flag });
+    console.log({ flags });
+  }
+
+  const url = new URL(window.location.href);
+  console.log(window.location.href, url, url.search, url.searchParams);
+  for (const e of url.searchParams.entries()) {
+    console.log(e);
+  }
+  const tid = url.searchParams.get("transactionId");
+  const glideBackUrl = url.searchParams.get("backUrl");
+  async function onGoBack() {
+    if (glideBackUrl) {
+      await bridge.dispatch({
+        type: "NAVIGATE",
+        payload: {
+          page: glideBackUrl,
+        },
+      });
+    }
   }
 
   async function onGetToken() {
@@ -132,8 +153,11 @@ export function CABWidget({ simple }) {
       <button onClick={() => onGotoProfile(true)}>Profile in new tab</button>
 
       <button onClick={onCreateTransaction}>Create new transaction</button>
-      <button onClick={onGetFlag}>Get Flag</button>
+      <button onClick={onGetFlag}>Get Flags</button>
       <button onClick={onGotoFlow}>To ads flow</button>
+      <button onClick={onGoBack} disabled={!glideBackUrl}>
+        Go Back (from txn {tid})
+      </button>
       <button onClick={onGetToken}>Get Token</button>
       <table>
         <tbody>
